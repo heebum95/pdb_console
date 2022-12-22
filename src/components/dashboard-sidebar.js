@@ -3,25 +3,22 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { Box, Button, Divider, Drawer, Typography, useMediaQuery, Avatar } from '@mui/material';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { ChartBar as ChartBarIcon } from '../icons/chart-bar';
-import { Cog as CogIcon } from '../icons/cog';
 import { Lock as LockIcon } from '../icons/lock';
-import { Selector as SelectorIcon } from '../icons/selector';
-import { ShoppingBag as ShoppingBagIcon } from '../icons/shopping-bag';
-import { User as UserIcon } from '../icons/user';
 import { UserAdd as UserAddIcon } from '../icons/user-add';
 import { Users as UsersIcon } from '../icons/users';
-import { XCircle as XCircleIcon } from '../icons/x-circle';
 import { NavItem } from './nav-item';
 import { UserCircle as UserCircleIcon } from '../icons/user-circle';
-import { AccountPopover } from './account-popover';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import MovieIcon from '@mui/icons-material/Movie';
+import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+
 
 const items = [
   {
     href: '/',
     icon: (<ChartBarIcon fontSize="small" />),
-    title: 'Dashboard'
+    title: 'Main Page'
   },
   {
     href: '/customers',
@@ -30,17 +27,17 @@ const items = [
   },
   {
     href: '/products',
-    icon: (<ShoppingBagIcon fontSize="small" />),
+    icon: (<EmojiEventsIcon fontSize="small" />),
     title: 'Award'
   },
   {
     href: '/account',
-    icon: (<UserIcon fontSize="small" />),
+    icon: (<MovieIcon fontSize="small" />),
     title: 'Content'
   },
   {
     href: '/settings',
-    icon: (<CogIcon fontSize="small" />),
+    icon: (<SupervisedUserCircleIcon fontSize="small" />),
     title: 'Staff'
   },
   {

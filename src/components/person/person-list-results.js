@@ -22,11 +22,18 @@ export const CustomerListResults = ({ person, ...rest }) => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
 
+  const [human, setHuman] = useState([]);
+  const [name, setName] = useState('');
+  const [type, setType] = useState('');
+  const [role, setRole] = useState('');
+  const [birthday, setBirthday] = useState('');
+  const [perid, setPerid] = useState('');
+  
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = customers.map((per) => per.id);
+      newSelectedCustomerIds = person.map((per) => per.id);
     } else {
       newSelectedCustomerIds = [];
     }
@@ -82,19 +89,19 @@ export const CustomerListResults = ({ person, ...rest }) => {
                   />
                 </TableCell>
                 <TableCell>
-                  Name
+                  Stage Name
                 </TableCell>
                 <TableCell>
-                  Email
+                  Person Type
                 </TableCell>
                 <TableCell>
-                  Location
+                  Person Role
                 </TableCell>
                 <TableCell>
-                  Phone
+                  Birthday 
                 </TableCell>
                 <TableCell>
-                  Registration date
+                  Person ID
                 </TableCell>
               </TableRow>
             </TableHead>
