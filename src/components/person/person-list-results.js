@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
@@ -17,18 +17,40 @@ import {
 } from '@mui/material';
 import { getInitials } from '../../utils/get-initials';
 
+
+const columns = [
+  { id: 'stage_names', label: 'STAGE NAME'},
+  { id: 'person_types', label: 'PERSON TYPE'},
+  { id: 'person_roles', label: 'PERSON ROLE', minWidth: 100 },
+  { id: 'birthday', label: 'BIRTHDAY'},
+  { id: 'id', label: 'PERSON ID'},
+
+];
+
 export const CustomerListResults = ({ person, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
-
+  const [count, setCount] = useState(0);
   const [human, setHuman] = useState([]);
   const [name, setName] = useState('');
   const [type, setType] = useState('');
   const [role, setRole] = useState('');
   const [birthday, setBirthday] = useState('');
   const [perid, setPerid] = useState('');
-  
+
+  useEffect(() => {
+    fetch('https://dev-pdb.kocowa.com/api/v01/be/person/list?status=active&offset=' + 0 + '&limit=' + 10)
+    .then((response) => response.json())
+    .then((json => {
+      setCount(json.total_count);
+      setHuman(json.objects);
+    }))
+  }, [])
+
+
+
+  console.log(human)
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
 
@@ -59,6 +81,7 @@ export const CustomerListResults = ({ person, ...rest }) => {
     }
 
     setSelectedCustomerIds(newSelectedCustomerIds);
+    console.log(id);
   };
 
   const handleLimitChange = (event) => {
@@ -77,7 +100,8 @@ export const CustomerListResults = ({ person, ...rest }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
+                <TableCell padding="checkbox"
+                  style={{backgroundColor: "beige"}}>
                   <Checkbox
                     checked={selectedCustomerIds.length === person.length}
                     color="primary"
@@ -88,25 +112,102 @@ export const CustomerListResults = ({ person, ...rest }) => {
                     onChange={handleSelectAll}
                   />
                 </TableCell>
-                <TableCell>
-                  Stage Name
-                </TableCell>
-                <TableCell>
-                  Person Type
-                </TableCell>
-                <TableCell>
-                  Person Role
-                </TableCell>
-                <TableCell>
-                  Birthday 
-                </TableCell>
-                <TableCell>
-                  Person ID
-                </TableCell>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth, backgroundColor: "beige"}}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+
+
+                
               </TableRow>
             </TableHead>
             <TableBody>
-              {person.slice(0, limit).map((per) => (
+  
+            {human
+                .map((per) => {
+                  
+                  return (
+                    
+                    <TableRow key={per.id} hover selected={selectedCustomerIds.indexOf(per.id) !== -1}>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={selectedCustomerIds.indexOf(per.id) !== -1}
+                          onChange={(event) => handleSelectOne(event, per.id)}
+                          value="true"/>
+                      </TableCell>
+                      {columns.map((column) => {
+                        const value = per[column.id];
+        
+                      if (column.id === 'edit'){
+                        return(
+                          <TableCell key={column.id} align={column.align}>
+                            <Link to={`/person/detail/${per.id}`} ><button>edit</button></Link>
+                          </TableCell>
+                          );
+
+                        }
+                      if(typeof(value) === 'object'){
+                        if(value === null){
+                          return (
+                            <TableCell key={column.id} align={column.align} >
+                            {null}
+                          </TableCell>
+                          )
+                        }
+
+                        else if(value.length ===2){
+                          return (
+                            <TableCell key={column.id} align={column.align} >
+                            {value[0]}, {value[1]}
+                          </TableCell>
+                          )
+                        }else if(value.length===3){
+                          return (
+                            <TableCell key={column.id} align={column.align} >
+                            {value[0]}, {value[1]}, {value[2]}
+                          </TableCell>
+                          )
+                        }
+                      }
+                      return (
+                        <TableCell key={column.id} align={column.align} >
+                          {value}
+                        </TableCell>
+                        );
+                      })
+                      }
+
+                    </TableRow>
+                    
+                  );
+                  
+                })}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              {/* {person.slice(0, limit).map((per) => (
                 <TableRow
                   hover
                   key={per.id}
@@ -153,7 +254,7 @@ export const CustomerListResults = ({ person, ...rest }) => {
                     {format(per.createdAt, 'dd/MM/yyyy')}
                   </TableCell>
                 </TableRow>
-              ))}
+              ))} */}
             </TableBody>
           </Table>
         </Box>
