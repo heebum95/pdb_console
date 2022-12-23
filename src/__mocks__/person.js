@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid';
 
 export const person = [
+  
   {
     id: uuid(),
     address: {
@@ -15,6 +16,7 @@ export const person = [
     name: 'Ekaterina Tankova',
     phone: '304-428-3097'
   },
+
   {
     id: uuid(),
     address: {
