@@ -18,7 +18,7 @@ const items = [
   {
     href: '/',
     icon: (<ChartBarIcon fontSize="small" />),
-    title: 'Main Page'
+    title: 'Home'
   },
   {
     href: '/customers',
@@ -133,7 +133,7 @@ export const DashboardSidebar = (props) => {
               width: 40,
               ml: 1
             }}
-            src="/static/images/avatars/avatar_1.png"
+            src="/static/images/avatars/avatar_1.jpeg"
           >
             <UserCircleIcon fontSize="small" />
           </Avatar>
