@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+import EditIcon from '@mui/icons-material/Edit';
 import {
-  Avatar,
   Box,
   Card,
   Checkbox,
@@ -13,10 +12,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
 } from '@mui/material';
-import { getInitials } from '../../utils/get-initials';
-
 
 const columns = [
   { id: 'stage_names', label: 'STAGE NAME'},
@@ -24,12 +20,14 @@ const columns = [
   { id: 'person_roles', label: 'PERSON ROLE', minWidth: 100 },
   { id: 'birthday', label: 'BIRTHDAY'},
   { id: 'id', label: 'PERSON ID'},
+  { id: 'edit', label: 'EDIT'},
 
 ];
 
-export const CustomerListResults = ({ person, ...rest }) => {
+export const CustomerListResults = () => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
   const [human, setHuman] = useState([]);
@@ -40,22 +38,19 @@ export const CustomerListResults = ({ person, ...rest }) => {
   const [perid, setPerid] = useState('');
 
   useEffect(() => {
-    fetch('https://dev-pdb.kocowa.com/api/v01/be/person/list?status=active&offset=' + 0 + '&limit=' + 10)
+    fetch('https://dev-pdb.kocowa.com/api/v01/be/person/list?status=active&offset=' + (page)* rowsPerPage + '&limit=' + rowsPerPage)
     .then((response) => response.json())
     .then((json => {
       setCount(json.total_count);
       setHuman(json.objects);
     }))
-  }, [])
+  }, [page])
 
-
-
-  console.log(human)
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = person.map((per) => per.id);
+      newSelectedCustomerIds = human.map((per) => per.id);
     } else {
       newSelectedCustomerIds = [];
     }
@@ -84,17 +79,21 @@ export const CustomerListResults = ({ person, ...rest }) => {
     console.log(id);
   };
 
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
   };
-
-  const handlePageChange = (event, newPage) => {
+  const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
 
   return (
-    <Card {...rest}>
+    <Card >
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -103,11 +102,11 @@ export const CustomerListResults = ({ person, ...rest }) => {
                 <TableCell padding="checkbox"
                   style={{backgroundColor: "beige"}}>
                   <Checkbox
-                    checked={selectedCustomerIds.length === person.length}
+                    checked={selectedCustomerIds.length === human.length}
                     color="primary"
                     indeterminate={
                       selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < person.length
+                      && selectedCustomerIds.length < human.length
                     }
                     onChange={handleSelectAll}
                   />
@@ -130,9 +129,7 @@ export const CustomerListResults = ({ person, ...rest }) => {
   
             {human
                 .map((per) => {
-                  
                   return (
-                    
                     <TableRow key={per.id} hover selected={selectedCustomerIds.indexOf(per.id) !== -1}>
                       <TableCell padding="checkbox">
                         <Checkbox
@@ -146,7 +143,7 @@ export const CustomerListResults = ({ person, ...rest }) => {
                       if (column.id === 'edit'){
                         return(
                           <TableCell key={column.id} align={column.align}>
-                            <Link to={`/person/detail/${per.id}`} ><button>edit</button></Link>
+                            <EditIcon></EditIcon>
                           </TableCell>
                           );
 
@@ -187,26 +184,6 @@ export const CustomerListResults = ({ person, ...rest }) => {
                   );
                   
                 })}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               {/* {person.slice(0, limit).map((per) => (
                 <TableRow
                   hover
@@ -261,13 +238,12 @@ export const CustomerListResults = ({ person, ...rest }) => {
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={person.length}
-        onPageChange={handlePageChange}
-        onRowsPerPageChange={handleLimitChange}
+        count={count}
+        rowsPerPage={rowsPerPage}
         page={page}
-        rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage} />
+
     </Card>
   );
 };
