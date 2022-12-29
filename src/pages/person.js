@@ -3,13 +3,13 @@ import { Box, Container } from '@mui/material';
 import { CustomerListResults } from '../components/person/person-list-results';
 import { CustomerListToolbar } from '../components/person/person-list-toolbar';
 import { DashboardLayout } from '../components/dashboard-layout';
-import { person } from '../__mocks__/person';
+
 
 const Page = () => (
   <>
     <Head>
       <title>
-        Customers | Material Kit
+        PDB Person
       </title>
     </Head>
     <Box
@@ -22,7 +22,7 @@ const Page = () => (
       <Container maxWidth={false}>
         <CustomerListToolbar />
         <Box sx={{ mt: 3 }}>
-          <CustomerListResults person={person} />
+          <CustomerListResults />
         </Box>
       </Container>
     </Box>

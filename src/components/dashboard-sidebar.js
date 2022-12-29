@@ -21,22 +21,22 @@ const items = [
     title: 'Home'
   },
   {
-    href: '/customers',
+    href: '/person',
     icon: (<UsersIcon fontSize="small" />),
     title: 'Person'
   },
   {
-    href: '/products',
+    href: '/award',
     icon: (<EmojiEventsIcon fontSize="small" />),
     title: 'Award'
   },
   {
-    href: '/account',
+    href: '/content',
     icon: (<MovieIcon fontSize="small" />),
     title: 'Content'
   },
   {
-    href: '/settings',
+    href: '/staff',
     icon: (<SupervisedUserCircleIcon fontSize="small" />),
     title: 'Staff'
   },
@@ -163,18 +163,6 @@ export const DashboardSidebar = (props) => {
             py: 3
           }}
         >
-          <Typography
-            color="neutral.100"
-            variant="subtitle2"
-          >
-            Need more features?
-          </Typography>
-          <Typography
-            color="neutral.500"
-            variant="body2"
-          >
-            Check out our Pro solution template.
-          </Typography>
           <Box
             sx={{
               display: 'flex',
@@ -188,7 +176,7 @@ export const DashboardSidebar = (props) => {
           >
             <img
               alt="Go to pro"
-              src="/static/images/sidebar_pro.png"
+              src="/static/images/products/KOCOWA_BI_White.png"
             />
           </Box>
         </Box>

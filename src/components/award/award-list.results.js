@@ -19,21 +19,22 @@ import {
 } from '@mui/material';
 
 const columns = [
-  { id: 'stage_names', label: 'STAGE NAME'},
-  { id: 'person_types', label: 'PERSON TYPE'},
-  { id: 'person_roles', label: 'PERSON ROLE', minWidth: 100 },
-  { id: 'birthday', label: 'BIRTHDAY'},
-  { id: 'id', label: 'PERSON ID'},
+  { id: 'id', label: 'AWARD ID'},
+  { id: 'year', label: 'YEAR'},
+  { id: 'description', label: 'DESCRIPTION'},
+  { id: 'person_id', label: 'PERSON ID'},
+  { id: 'content_id', label: 'CONTENT ID' },
   { id: 'edit', label: 'EDIT'},
 ];
 
-export const CustomerListResults = () => {
+export const AwardListResults = () => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
   const [human, setHuman] = useState([]);
+  const [award, setAward] = useState([]);
   const [name, setName] = useState('');
   const [type, setType] = useState('');
   const [role, setRole] = useState('');
@@ -41,12 +42,13 @@ export const CustomerListResults = () => {
   const [perid, setPerid] = useState('');
   const [keyword, setKeyword] = useState('');
 
+
   useEffect(() => {
-    fetch('https://dev-pdb.kocowa.com/api/v01/be/person/list?status=active&offset=' + (page)* rowsPerPage + '&limit=' + rowsPerPage + '&keyword=' + keyword)
+    fetch('https://dev-pdb.kocowa.com/api/v01/be/award/list?person_id=' + keyword + '&offset=' + (page) * rowsPerPage +  '&limit=' + rowsPerPage)
     .then((response) => response.json())
     .then((json => {
       setCount(json.total_count);
-      setHuman(json.objects);
+      setAward(json.objects);
     }))
   }, [page, keyword])
 
@@ -158,18 +160,18 @@ export const CustomerListResults = () => {
             </TableHead>
             <TableBody>
   
-            {human
-                .map((per) => {
+            {award
+                .map((aw) => {
                   return (
-                    <TableRow key={per.id} hover selected={selectedCustomerIds.indexOf(per.id) !== -1}>
+                    <TableRow key={aw.id} hover selected={selectedCustomerIds.indexOf(aw.id) !== -1}>
                       <TableCell padding="checkbox">
                         <Checkbox
-                          checked={selectedCustomerIds.indexOf(per.id) !== -1}
-                          onChange={(event) => handleSelectOne(event, per.id)}
+                          checked={selectedCustomerIds.indexOf(aw.id) !== -1}
+                          onChange={(event) => handleSelectOne(event, aw.id)}
                           value="true"/>
                       </TableCell>
                       {columns.map((column) => {
-                        const value = per[column.id];
+                        const value = aw[column.id];
         
                       if (column.id === 'edit'){
                         return(
@@ -279,6 +281,6 @@ export const CustomerListResults = () => {
   );
 };
 
-CustomerListResults.propTypes = {
+AwardListResults.propTypes = {
   person: PropTypes.array.isRequired
 };
