@@ -44,13 +44,14 @@ export const AwardListResults = () => {
 
 
   useEffect(() => {
-    fetch('https://dev-pdb.kocowa.com/api/v01/be/award/list?person_id=' + keyword + '&offset=' + (page) * rowsPerPage +  '&limit=' + rowsPerPage)
+    fetch('https://dev-pdb.kocowa.com/api/v01/be/award/list?person_id=' + '0' + '&offset=' + (page) * rowsPerPage +  '&limit=' + rowsPerPage)
     .then((response) => response.json())
     .then((json => {
       setCount(json.total_count);
       setAward(json.objects);
     }))
   }, [page, keyword])
+  console.log(award)
 
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
@@ -171,8 +172,16 @@ export const AwardListResults = () => {
                           value="true"/>
                       </TableCell>
                       {columns.map((column) => {
-                        const value = aw[column.id];
-        
+                      
+                      const value = aw[column.id];
+                      if (typeof value == 'object') {
+                    
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {value.award}
+                          </TableCell>
+                        );
+                      }
                       if (column.id === 'edit'){
                         return(
                           <TableCell key={column.id} align={column.align}>
@@ -181,90 +190,20 @@ export const AwardListResults = () => {
                           );
 
                         }
-                      if(typeof(value) === 'object'){
-                        if(value === null){
-                          return (
-                            <TableCell key={column.id} align={column.align} >
-                            {null}
-                          </TableCell>
-                          )
-                        }
-
-                        else if(value.length ===2){
-                          return (
-                            <TableCell key={column.id} align={column.align} >
-                            {value[0]}, {value[1]}
-                          </TableCell>
-                          )
-                        }else if(value.length===3){
-                          return (
-                            <TableCell key={column.id} align={column.align} >
-                            {value[0]}, {value[1]}, {value[2]}
-                          </TableCell>
-                          )
-                        }
-                      }
                       return (
-                        <TableCell key={column.id} align={column.align} >
+                        <TableCell key={column.id} align={column.align}>
                           {value}
                         </TableCell>
-                        );
-                      })
-                      }
+                      );
+                    })}
+                      
 
                     </TableRow>
                     
                   );
                   
                 })}
-              {/* {person.slice(0, limit).map((per) => (
-                <TableRow
-                  hover
-                  key={per.id}
-                  selected={selectedCustomerIds.indexOf(per.id) !== -1}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={selectedCustomerIds.indexOf(per.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, per.id)}
-                      value="true"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Box
-                      sx={{
-                        alignItems: 'center',
-                        display: 'flex'
-                      }}
-                    >
-                      <Avatar
-                        src={per.avatarUrl}
-                        sx={{ mr: 2 }}
-                      >
-                        {getInitials(per.name)}
-                      </Avatar>
-                      <Typography
-                        color="textPrimary"
-                        variant="body1"
-                      >
-                        {per.name}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    {per.email}
-                  </TableCell>
-                  <TableCell>
-                    {`${per.address.city}, ${per.address.state}, ${per.address.country}`}
-                  </TableCell>
-                  <TableCell>
-                    {per.phone}
-                  </TableCell>
-                  <TableCell>
-                    {format(per.createdAt, 'dd/MM/yyyy')}
-                  </TableCell>
-                </TableRow>
-              ))} */}
+
             </TableBody>
           </Table>
         </Box>
